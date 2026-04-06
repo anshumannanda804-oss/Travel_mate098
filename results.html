@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Results - TravelMate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/style.css">
+
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .container > h2 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        /* Landscape mode - desktop layout */
+        @media (min-width: 1024px) {
+            .container {
+                padding: 2rem 2rem;
+            }
+
+            .results-wrapper {
+                display: grid;
+                grid-template-columns: 320px 1fr;
+                gap: 2.5rem;
+                align-items: start;
+            }
+
+            .trip-details-panel {
+                position: sticky;
+                top: 120px;
+                background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+                padding: 1.5rem;
+                border-radius: 15px;
+                border-left: 5px solid #667eea;
+                height: fit-content;
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+            }
+
+            .trip-details-panel p {
+                margin: 0.8rem 0;
+                line-height: 1.6;
+                font-size: 0.95rem;
+            }
+
+            .main-content {
+                display: flex;
+                flex-direction: column;
+                gap: 2.5rem;
+            }
+
+            #hotel-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .accommodation-selector {
+                background: white;
+                padding: 1.5rem;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            }
+        }
+
+        /* Tablet layout */
+        @media (max-width: 1023px) {
+            .container {
+                padding: 1.5rem 1rem;
+            }
+
+            .results-wrapper {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .trip-details-panel {
+                background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+                padding: 1.5rem;
+                border-radius: 15px;
+                border-left: 5px solid #667eea;
+                margin-bottom: 1.5rem;
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+            }
+
+            #hotel-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 1.5rem;
+            }
+        }
+
+        /* Mobile layout */
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .container > h2 {
+                font-size: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .results-wrapper {
+                flex-direction: column;
+            }
+
+            .trip-details-panel {
+                margin-bottom: 1.5rem;
+            }
+
+            #hotel-list {
+                grid-template-columns: 1fr;
+            }
+
+            .accommodation-selector {
+                margin-bottom: 1.5rem;
+            }
+
+            .button-group {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* Hotel Card Styling */
+        .hotel-card {
+            border: 2px solid #e8e8e8 !important;
+            border-radius: 12px !important;
+            padding: 1.5rem !important;
+            background: white !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+        }
+
+        .hotel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(102, 126, 234, 0.2) !important;
+            border-color: #667eea !important;
+        }
+
+        .hotel-card h4 {
+            margin-top: 0 !important;
+            margin-bottom: 0.5rem !important;
+            color: #2c3e50 !important;
+            font-size: 1.1rem !important;
+            font-weight: 600 !important;
+        }
+
+        .hotel-card p {
+            color: #666 !important;
+            margin: 0.5rem 0 !important;
+            font-size: 0.9rem !important;
+        }
+
+        /* Accommodation Selector */
+        .accommodation-selector {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .accommodation-selector h3 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .accom-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .accom-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .accom-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* Accommodation Cost Card */
+        .accommodation-cost-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid #667eea;
+        }
+
+        .accommodation-cost-card b {
+            color: #2c3e50;
+        }
+
+        /* Map styling */
+        #map {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid #e8e8e8;
+        }
+
+        /* Booking buttons */
+        .booking-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+        }
+
+        .booking-buttons a {
+            text-decoration: none;
+        }
+
+        .book-btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            color: white;
+        }
+
+        .irctc {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .irctc:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .redbus {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+
+        .redbus:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(245, 87, 108, 0.3);
+        }
+
+        .ixigo {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+
+        .ixigo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(79, 172, 254, 0.3);
+        }
+
+        /* Section headings */
+        .main-content h3 {
+            color: #2c3e50;
+            font-size: 1.4rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="nav-brand">✈️ TravelMate</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="#" class="nav-link" onclick="logout()">Logout</a>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <h2>📋 Your Trip Plan</h2>
+
+    <div class="results-wrapper">
+        <!-- LEFT PANEL: Trip Details (Sticky in landscape) -->
+        <div class="trip-details-panel">
+            <div id="tripData"></div>
+        </div>
+
+        <!-- RIGHT PANEL: Main Content -->
+        <div class="main-content">
+            <!-- ACCOMMODATION TYPE SELECTOR -->
+            <div class="accommodation-selector">
+                <h3>🏠 Select Accommodation Type</h3>
+                <div class="button-group">
+                    <button class="accom-btn" data-type="budget" onclick="selectAccommodation('budget')">💰 Budget</button>
+                    <button class="accom-btn" data-type="medium" onclick="selectAccommodation('medium')">⭐ Medium</button>
+                    <button class="accom-btn" data-type="luxury" onclick="selectAccommodation('luxury')">👑 Luxury</button>
+                </div>
+            </div>
+
+            <!-- ACCOMMODATION COST DISPLAY -->
+            <div id="accommodationCost" class="accommodation-cost-card" style="display:none;"></div>
+
+            <div id="map" style="height:420px;"></div>
+
+            <h3>🚌 Book Your Transport</h3>
+
+            <div class="booking-buttons">
+                <a href="https://www.irctc.co.in" target="_blank" style="text-decoration: none;">
+                    <button class="book-btn irctc">🚂 Trains</button>
+                </a>
+
+                <a href="https://www.redbus.in" target="_blank" style="text-decoration: none;">
+                    <button class="book-btn redbus">🚌 Buses</button>
+                </a>
+
+                <a href="https://www.ixigo.com" target="_blank" style="text-decoration: none;">
+                    <button class="book-btn ixigo">✈️ Flights</button>
+                </a>
+            </div>
+
+            <h3>🏨 Available Hotels</h3>
+            <div id="hotel-list"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+let map;
+let hotelMarkers = [];
+let tripData = null;
+let selectedAccommodation = 'budget';
+
+/* MAP LOAD */
+map = L.map("map").setView([20.5937, 78.9629], 5);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
+    .addTo(map);
+
+/* GET TRIP DATA */
+const trip = JSON.parse(localStorage.getItem("trip"));
+
+if (!trip || !trip.source) {
+    alert("Trip data missing. Please plan again.");
+    window.location.href = "index.html";
+}
+
+/* Initial Text */
+document.getElementById("tripData").innerHTML = `
+<div style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08)); padding: 1.5rem; border-radius: 12px; border-left: 5px solid #667eea;">
+    <p style="margin: 0.5rem 0;"><strong>📍 From:</strong> <span style="color: #667eea; font-weight: 600;">${trip.source || 'N/A'}</span></p>
+    <p style="margin: 0.5rem 0;"><strong>🌍 To:</strong> <span style="color: #667eea; font-weight: 600;">${trip.destination || 'N/A'}</span></p>
+    <p style="margin: 0.5rem 0;"><strong>📅 Duration:</strong> <span style="color: #667eea; font-weight: 600;">${trip.days || 'N/A'} days</span></p>
+    <p style="margin-top: 1rem; color: #888; text-align: center; font-size: 0.9rem;">⏳ Loading map & hotels...</p>
+</div>
+`;
+
+/* FETCH BACKEND */
+fetch("http://127.0.0.1:5000/api/trip-details", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+        source: trip.source,
+        destination: trip.destination,
+        days: trip.days
+    })
+})
+.then(res => res.json())
+.then(res => {
+
+    if (!res.success) {
+        alert(res.message);
+        return;
+    }
+
+    tripData = res.data;
+
+    const transport = tripData.transport || {};
+    const extra = 0;
+
+    let options = [];
+
+    // Bus
+    if (transport.bus) {
+        options.push({
+            type: "Bus",
+            total: transport.bus + extra
+        });
+    }
+
+    // Train
+    if (transport.train) {
+        options.push({
+            type: "Train",
+            total: transport.train + extra
+        });
+    }
+
+    // Flight
+    if (transport.flight) {
+        options.push({
+            type: "Flight",
+            total: transport.flight + extra
+        });
+    }
+
+    // Find cheapest option
+    let bestOption = options.reduce((min, current) =>
+        current.total < min.total ? current : min
+    );
+
+    const budget = bestOption.total;
+
+    document.getElementById("tripData").innerHTML = `
+    <b style="font-size: 18px; color: #333;">Trip Summary</b><br>
+    Source: ${trip.source}<br>
+    Destination: ${trip.destination}<br>
+    Days: ${trip.days}<br>
+    Distance: ${tripData.distance_km} km<br>
+    <hr>
+    <b>Transportation Cost (Cheapest: ${bestOption.type}): ${tripData.accommodation_costs.currency} ${budget}</b><br>
+    Bus: ${tripData.accommodation_costs.currency} ${transport.bus ?? "N/A"}<br>
+    Train: ${tripData.accommodation_costs.currency} ${transport.train ?? "N/A"}<br>
+    Flight: ${tripData.accommodation_costs.currency} ${transport.flight ?? "N/A"}
+    `;
+
+    // Display default accommodation (budget)
+    selectAccommodation('budget');
+    
+    updateMap(tripData);
+})
+.catch(err => {
+    console.error(err);
+    alert("Backend error.");
+});
+
+/* SELECT ACCOMMODATION TYPE */
+function selectAccommodation(type) {
+    selectedAccommodation = type;
+    
+    // Update button styles
+    document.querySelectorAll('.accom-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.querySelector(`[data-type="${type}"]`).classList.add('active');
+
+    // Calculate total and per-day cost
+    const accommodations = {
+        budget: {
+            per_day: tripData.accommodation_costs.budget.per_day,
+            total_accommodation: tripData.accommodation_costs.budget.total,
+            label: 'Budget',
+            color: '#28a745'
+        },
+        medium: {
+            per_day: tripData.accommodation_costs.medium.per_day,
+            total_accommodation: tripData.accommodation_costs.medium.total,
+            label: 'Medium',
+            color: '#ffc107'
+        },
+        luxury: {
+            per_day: tripData.accommodation_costs.luxury.per_day,
+            total_accommodation: tripData.accommodation_costs.luxury.total,
+            label: 'Luxury',
+            color: '#e74c3c'
+        }
+    };
+
+    const selected = accommodations[type];
+    const total_budget = tripData.total_budgets[type];
+
+    document.getElementById("accommodationCost").innerHTML = `
+        <div style="padding: 0;">
+            <h4 style="color: ${selected.color}; margin: 0 0 1rem 0; font-size: 1.15rem;">${selected.label} Accommodation</h4>
+            <div style="display: grid; gap: 0.8rem; font-size: 0.95rem; line-height: 1.6;">
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #e0e0e0; padding-bottom: 0.8rem;">
+                    <span>Per Day Cost:</span>
+                    <span style="font-weight: 600; color: #2c3e50;">${tripData.accommodation_costs.currency} ${selected.per_day}/day</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #e0e0e0; padding-bottom: 0.8rem;">
+                    <span>Accommodation (${tripData.accommodation_costs.days} days):</span>
+                    <span style="font-weight: 600; color: #2c3e50;">${tripData.accommodation_costs.currency} ${selected.total_accommodation}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #e0e0e0; padding-bottom: 0.8rem;">
+                    <span>Transportation:</span>
+                    <span style="font-weight: 600; color: #2c3e50;">${tripData.accommodation_costs.currency} ${total_budget.transport}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #e0e0e0; padding-bottom: 0.8rem;">
+                    <span>Extra Cost:</span>
+                    <span style="font-weight: 600; color: #2c3e50;">${tripData.accommodation_costs.currency} ${total_budget.extra}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding-top: 0.5rem; background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08)); padding: 1rem; border-radius: 8px; margin-top: 0.5rem;">
+                    <span style="font-weight: 600; color: #2c3e50;">Total Trip Budget:</span>
+                    <span style="font-weight: 700; font-size: 1.1rem; color: ${selected.color};">${tripData.accommodation_costs.currency} ${total_budget.total}</span>
+                </div>
+            </div>
+        </div>
+    `;
+    document.getElementById("accommodationCost").style.display = 'block';
+}
+
+/* UPDATE MAP */
+function updateMap(data) {
+
+    map.setView([data.latitude, data.longitude], 13);
+
+    hotelMarkers.forEach(m => map.removeLayer(m));
+    hotelMarkers = [];
+
+    const hotelList = document.getElementById("hotel-list");
+    hotelList.innerHTML = "";
+
+    if (!data.hotels || data.hotels.length === 0) {
+        hotelList.innerHTML = "<p>No hotels found for this destination.</p>";
+        return;
+    }
+
+    data.hotels.forEach(h => {
+        // Ensure we have valid hotel data
+        const hotelName = h.name || h.hotel_name || 'Unknown Hotel';
+        const hotelCountry = h.country || h.location || '';
+        const hotelLat = parseFloat(h.lat || data.latitude);
+        const hotelLon = parseFloat(h.lon || data.longitude);
+
+        const marker = L.marker([hotelLat, hotelLon])
+            .addTo(map)
+            .bindPopup(hotelName);
+
+        hotelMarkers.push(marker);
+
+        let locationHtml = '';
+        if (hotelCountry) {
+            locationHtml = `<p>📍 ${hotelCountry}</p>`;
+        }
+
+        hotelList.innerHTML += `
+            <div class="hotel-card">
+                <h4>${hotelName}</h4>
+                ${locationHtml}
+                <button onclick="bookHotel('${hotelName.replace(/'/g, "\\'")}')" class="btn btn-primary" style="margin-top: 1rem; padding: 0.7rem 1rem; font-size: 0.9rem; width: 100%; cursor: pointer;">🏨 Book Now</button>
+            </div>
+        `;
+    });
+}
+
+/* BOOK HOTEL */
+function bookHotel(hotelName) {
+    localStorage.setItem("selectedHotel", hotelName);
+    window.location.href = "hotel_booking.html";
+}
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "login.html";
+}
+</script>
+
+<footer class="footer" style="margin-top: 4rem;">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h4>About TravelMate</h4>
+            <p>Your ultimate travel companion for planning amazing trips with accurate cost estimates.</p>
+        </div>
+        <div class="footer-section">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html">Plan Trip</a></li>
+                <li><a href="#">Support</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Follow Us</h4>
+            <div class="social-links">
+                <a href="#" class="social-link">FB</a>
+                <a href="#" class="social-link">TW</a>
+                <a href="#" class="social-link">IG</a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 TravelMate. All rights reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>
