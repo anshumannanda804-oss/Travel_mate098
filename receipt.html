@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Receipt - TravelMate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/style.css">
+    <style>
+        .container {
+            max-width: 550px !important;
+            margin: 2rem auto !important;
+            padding: 2rem !important;
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="nav-brand">✈️ TravelMate</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="#" class="nav-link" onclick="logout()">Logout</a>
+        </div>
+    </div>
+</nav>
+    <div class="container">
+        <h2 style="text-align: center; color: #28a745; font-size: 2rem; margin-bottom: 2rem;">✓ Booking Confirmed!</h2>
+        <div class="receipt-card" id="receipt"></div>
+
+        <button class="btn btn-primary" onclick="goHome()" style="margin-top: 2rem;">📋 Plan Another Trip</button>
+    </div>
+
+    <script>
+        function logout() {
+            localStorage.clear();
+            window.location.href = "login.html";
+        }
+
+        // Load receipt data from localStorage
+        const data = JSON.parse(localStorage.getItem("receipt"));
+
+        if (data) {
+            document.getElementById("receipt").innerHTML = `
+                <div style="border-top: 3px dashed #667eea; padding-top: 1.5rem;">
+                    <p style="text-align: center; color: #28a745; font-weight: bold; font-size: 1.1rem; margin-bottom: 1rem;">✓ BOOKING CONFIRMED</p>
+                    <p><strong>📍 Booking ID:</strong> <span style="color: #667eea; font-weight: 600;">#${data.booking_id}</span></p>
+                    <p><strong>🏨 Hotel:</strong> ${data.hotel}</p>
+                    <p><strong>📅 Check-in:</strong> ${data.checkin}</p>
+                    <p><strong>📅 Check-out:</strong> ${data.checkout}</p>
+                    <p><strong>🛏️ Room Type:</strong> ${data.room.charAt(0).toUpperCase() + data.room.slice(1)}</p>
+                    <p><strong>👥 Guests:</strong> ${data.guests}</p>
+                    <hr style="border: none; border-top: 2px solid #667eea; margin: 1.5rem 0;">
+                    <p style="text-align: center; font-size: 1.2rem;"><strong>Total Paid: <span style="color: #28a745; font-size: 1.4rem;">${data.currency_symbol || '₹'}${data.total_price}</span></strong></p>
+                    <p style="text-align: center; color: #28a745; font-weight: 600; margin-top: 1rem;">✓ ${data.status}</p>
+                </div>
+            `;
+        } else {
+            document.getElementById("receipt").innerHTML =
+                "<p style=\"text-align: center; color: #e74c3c;\">❌ No booking data found.</p>";
+        }
+
+        function goHome() {
+            window.location.href = "index.html";
+        }
+    </script>
+
+    <footer class="footer" style="margin-top: 4rem;">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About TravelMate</h4>
+                <p>Your ultimate travel companion for planning amazing trips.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html">Plan Trip</a></li>
+                    <li><a href="#">Support</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Follow Us</h4>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/share/1DqrLqru2D/" class="social-link">FB</a>
+                    <a href="#" class="social-link">TW</a>
+                    <a href="https://www.instagram.com/travelmate308?igsh=MTY0Y2NyaXpmdXZpag==" class="social-link">IG</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 TravelMate. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
