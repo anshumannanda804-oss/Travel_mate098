@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelMate - Discover Your Next Adventure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="nav-brand">✈️ TravelMate</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link active">Home</a>
+            <a href="#destinations" class="nav-link">Destinations</a>
+            <a href="login.html" class="nav-link">Login</a>
+            <a href="signup.html" class="nav-link signup-btn">Sign Up</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section with Plan Trip -->
+<div class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1 class="hero-title">Explore the World Your Way</h1>
+        <p class="hero-subtitle">Plan your perfect trip with real-time costs and personalized recommendations</p>
+        
+        <div class="plan-trip-card">
+            <h3>Plan Your Trip</h3>
+            <div class="form-group">
+                <input type="text" id="source" placeholder="📍 From (Source City)" class="form-input">
+                <input type="text" id="destination" placeholder="🌍 To (Destination City)" class="form-input">
+                <input type="number" id="days" min="1" placeholder="📅 Number of Days" class="form-input">
+            </div>
+            <button type="button" onclick="planTrip()" class="btn btn-primary">Discover & Plan</button>
+        </div>
+    </div>
+</div>
+
+<!-- Destinations Section -->
+<div class="destinations-section" id="destinations">
+    <div class="section-header">
+        <h2 class="section-title">🌍 Explore Popular Destinations</h2>
+        <p class="section-subtitle">Handpicked destinations with amazing experiences</p>
+    </div>
+
+    <div class="places-wrapper">
+        <div class="place-details-panel">
+            <h3 id="detail-title">Select a destination</h3>
+            <div id="detail-image-container">
+                <img id="detail-image" src="" alt="Place Image" style="display:none;">
+            </div>
+            <div id="detail-description" class="detail-text">
+                <p>Explore detailed information about each destination including weather, best seasons, attractions, and more.</p>
+            </div>
+        </div>
+        
+        <div class="places-section">
+            <div class="category-section">
+                <h3>🏛️ Top Places in India</h3>
+                <div id="india-container" class="places-grid"></div>
+            </div>
+            
+            <div class="category-section">
+                <h3>🌴 Top Places in Odisha</h3>
+                <div id="odisha-container" class="places-grid"></div>
+            </div>
+            
+            <div class="category-section">
+                <h3>🌎 Most Visited Places Globally</h3>
+                <div id="global-container" class="places-grid"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h4>About TravelMate</h4>
+            <p>Your ultimate travel companion for planning amazing trips with accurate cost estimates and personalized recommendations.</p>
+        </div>
+        <div class="footer-section">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="#destinations">Destinations</a></li>
+                <li><a href="login.html">Account</a></li>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Follow Us</h4>
+            <div class="social-links">
+                <a href="#" class="social-link">Facebook</a>
+                <a href="#" class="social-link">Twitter</a>
+                <a href="#" class="social-link">Instagram</a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 TravelMate. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </div>
+</footer>
+
+<script>
+function planTrip() {
+    const destinationInput = document.getElementById("destination");
+    const daysInput = document.getElementById("days");
+
+    const destination = destinationInput.value.trim();
+    const days = parseInt(daysInput.value, 10);
+    const source = document.getElementById("source").value.trim();
+
+    if (source.length < 3) {
+    alert("Please enter a valid source city");
+    return;
+   }
+
+    // Validation
+    if (destination.length < 3) {
+        alert("Please enter a valid destination name");
+        return;
+    }
+
+    if (!isNaN(destination)) {
+        alert("Destination cannot be only numbers");
+        return;
+    }
+
+    if (!/^[a-zA-Z\s]+$/.test(destination)) {
+        alert("Destination should contain only letters");
+        return;
+    }
+
+    if (isNaN(days) || days < 1) {
+        alert("Number of days must be at least 1");
+        return;
+    }
+    if (!source || !destination || !days) {
+        alert("Please fill all fields");
+        return;
+    }
+
+    // ✅ SAVE TRIP FIRST (MOST IMPORTANT)
+    localStorage.setItem("trip", JSON.stringify({
+        source: source,
+        destination: destination,
+        days: days
+    }));
+
+    // ✅ SEND BOTH SOURCE & DESTINATION
+    fetch("http://127.0.0.1:5000/api/trip-details", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            source: source,
+            destination: destination
+        })
+    })
+    .then(res => res.json())
+    .then(res => {
+        if (!res.success) {
+            alert(res.message);
+            return;
+        }
+
+        localStorage.setItem("mapData", JSON.stringify(res.data));
+        window.location.href = "results.html";
+    })
+    .catch(() => alert("Backend not reachable"));
+}
+</script>
+
+<script src="static/places.js"></script>
+
+</body>
+</html>
