@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Plan Trip</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+    <div class="logout-container">
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+    <div class="container">
+        <h2>Plan Your Trip</h2>
+
+        <!-- SOURCE CITY -->
+        <input type="text" id="source" placeholder="Enter source city">
+
+        <!-- DESTINATION -->
+        <input type="text" id="destination" placeholder="Enter destination city">
+
+        <!-- DAYS -->
+        <input type="number" id="days" min="1" placeholder="Number of days">
+
+        <button type="button" onclick="planTrip()">Plan Trip</button>
+    </div>
+
+<script>
+function logout() {
+    localStorage.clear();
+    window.location.href = "login.html";
+}
+
+function planTrip() {
+    const source = document.getElementById("source").value.trim();
+    const destination = document.getElementById("destination").value.trim();
+    const days = Number(document.getElementById("days").value);
+
+    if (!source || !destination || !days) {
+        alert("Please fill all fields");
+        return;
+    }
+
+    // ✅ SAVE TRIP FIRST (MOST IMPORTANT)
+    localStorage.setItem("trip", JSON.stringify({
+        source: source,
+        destination: destination,
+        days: days
+    }));
+
+    // ✅ SEND SOURCE, DESTINATION & DAYS
+    fetch("http://127.0.0.1:5000/api/trip-details", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            source: source,
+            destination: destination,
+            days: days
+        })
+    })
+    .then(res => res.json())
+    .then(res => {
+        if (!res.success) {
+            alert(res.message);
+            return;
+        }
+
+        localStorage.setItem("mapData", JSON.stringify(res.data));
+        window.location.href = "results.html";
+    })
+    .catch(() => alert("Backend not reachable"));
+}
+</script>
+
+
+
+
+
+</body>
+</html>
