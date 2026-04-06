@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - TravelMate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body class="login-page">
+<style>
+    body.login-page .container {
+        width: 95%;
+        max-width: 650px;
+        padding: 3.5rem 3rem;
+        margin: 4rem auto;
+        border-radius: 25px;
+    }
+
+    .profile-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        max-width: 800px;
+        width: 100%;
+        margin: 2rem auto;
+        transition: all 0.3s ease;
+        display: none;
+    }
+
+    .profile-card:hover {
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        transform: translateY(-5px);
+    }
+
+    .profile-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .profile-header h2 {
+        color: #667eea;
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .profile-header p {
+        color: #666;
+        font-size: 1rem;
+    }
+
+    .profile-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+
+    .labels-column, .values-column {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .detail-label {
+        font-weight: 600;
+        color: #333;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .detail-value {
+        color: #555;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+        .profile-details {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .labels-column, .values-column {
+            gap: 1rem;
+        }
+
+        .profile-card {
+            padding: 1.5rem;
+        }
+
+        .profile-header h2 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="nav-brand">✈️ TravelMate</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="signup.html" class="nav-link">Sign Up</a>
+            <a href="login.html" class="nav-link active">Login</a>
+        </div>
+    </div>
+</nav>
+    <div class="container">
+        <h2>Welcome Back!</h2>
+        <p style="text-align: center; color: #888; margin-bottom: 8.5rem; font-size: 1.95rem;">Sign in to your account to continue</p>
+
+        <input type="email" id="email" placeholder="📧 Enter your email">
+        <input type="password" id="password" placeholder="🔐 Enter your password">
+
+        <button onclick="goPlanner()" class="btn btn-primary">Login to Your Account</button>
+
+        <div style="text-align: center; margin-top: 1.5rem;">
+            <p style="margin: 0.8rem 0; font-size: 0.95rem;">Don't have an account? <a href="signup.html" style="color: #667eea; font-weight: 600; text-decoration: none;">Create one now</a></p>
+            <p style="margin: 0.8rem 0; font-size: 0.95rem;"><a href="forgot_password.html" style="color: #667eea; font-weight: 600; text-decoration: none;">Forgot your password?</a></p>
+        </div>
+    </div>
+
+    <div class="profile-card" id="profileCard">
+        <div class="profile-header">
+            <h2>👤 Welcome Back!</h2>
+            <p>Your account details</p>
+        </div>
+        <div class="profile-details">
+            <div class="labels-column">
+                <div class="detail-label">Email</div>
+                <div class="detail-label">Last Login</div>
+                <div class="detail-label">Account Status</div>
+                <div class="detail-label">Quick Actions</div>
+            </div>
+            <div class="values-column">
+                <div class="detail-value" id="userEmail"></div>
+                <div class="detail-value">Just now</div>
+                <div class="detail-value">Active</div>
+                <div class="detail-value"><a href="index.html" style="color: #667eea; text-decoration: none;">Go to Planner</a></div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About TravelMate</h4>
+                <p>Your ultimate travel companion for planning amazing trips with accurate cost estimates.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">FAQs</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Follow Us</h4>
+                <div class="social-links">
+                    <a href="#" class="social-link">FB</a>
+                    <a href="#" class="social-link">TW</a>
+                    <a href="#" class="social-link">IG</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 TravelMate. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+        </div>
+    </footer>
+
+    <script>
+        function goPlanner() {
+            // Simple frontend login simulation
+            if (email.value && password.value) {
+                localStorage.setItem("user", email.value);
+                // Show profile card instead of redirecting
+                document.getElementById("userEmail").textContent = email.value;
+                document.getElementById("profileCard").style.display = "block";
+                // Scroll to card
+                document.getElementById("profileCard").scrollIntoView({ behavior: "smooth" });
+            } else {
+                alert("Please enter email and password");
+            }
+        }
+    </script>
+</body>
+<div id="loader">
+    <div class="globe"></div>
+    <div class="plane">✈️</div>
+    <h2 class="brand">TravelMate</h2>
+</div>
+<script>
+
+
+window.addEventListener("load", function(){
+    const loader = document.getElementById("loader");
+
+    setTimeout(() => {
+        loader.style.transition = "opacity 0.8s ease";
+        loader.style.opacity = "0";
+
+        setTimeout(() => {
+            loader.style.display = "none";
+        }, 800);
+    }, 1800);
+});
+</script>
+
+</script>
+</body>
+</html>
