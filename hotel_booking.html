@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Booking - TravelMate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/style.css">
+    <style>
+        .container {
+            max-width: 600px !important;
+            margin: 2rem auto !important;
+            padding: 2rem !important;
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="nav-brand">✈️ TravelMate</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="results.html" class="nav-link">Trip Results</a>
+            <a href="#" class="nav-link" onclick="logout()">Logout</a>
+        </div>
+    </div>
+</nav>
+    <div class="container">
+        <h2>🏨 Complete Your Hotel Booking</h2>
+
+        <form id="bookingForm">
+    <div style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08)); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem;">
+    <input type="text" id="hotelName" readonly placeholder="Hotel Name">
+
+    <label style="margin-top: 1rem; font-weight: 600; display: block; color: #2c3e50; margin-bottom: 0.5rem;">📅 Check-in Date</label>
+    <input type="date" id="checkin" required>
+
+    <label style="margin-top: 1rem; font-weight: 600; display: block; color: #2c3e50; margin-bottom: 0.5rem;">📅 Check-out Date</label>
+    <input type="date" id="checkout" required>
+
+    <label style="margin-top: 1rem; font-weight: 600; display: block; color: #2c3e50; margin-bottom: 0.5rem;">👥 Guests</label>
+    <select id="guests">
+        <option value="Couple">👫 Couple</option>
+        <option value="Family">👨‍👩‍👧‍👦 Family</option>
+        <option value="Friends">👬 Friends</option>
+    </select>
+
+    <label style="margin-top: 1rem; font-weight: 600; display: block; color: #2c3e50; margin-bottom: 0.5rem;">🛏️ Room Type</label>
+    <select id="roomType">
+        <option value="normal">Normal</option>
+        <option value="premium">Premium</option>
+        <option value="luxury">Luxury</option>
+    </select>
+
+    <div style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15)); padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem; text-align: center; border-left: 5px solid #667eea;">
+        <h3 id="price" style="color: #2c3e50; margin: 0; font-size: 1.5rem;">Total Price: ₹0</h3>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="margin-top: 2rem;">✓ Confirm Booking</button>
+    </div>
+</form>
+
+    <script>
+        // Show selected hotel name
+    
+document.getElementById("hotelName").value =
+    localStorage.getItem("selectedHotel") || "Hotel";
+/* -------- DATE VALIDATION -------- */
+
+const today = new Date().toISOString().split("T")[0];
+
+const checkinInput = document.getElementById("checkin");
+const checkoutInput = document.getElementById("checkout");
+
+/* Set minimum date = today */
+checkinInput.min = today;
+checkoutInput.min = today;
+
+/* Default checkin = today */
+checkinInput.value = today;
+
+/* Checkout must be after checkin */
+checkinInput.addEventListener("change", () => {
+    checkoutInput.min = checkinInput.value;
+});
+
+/* Prevent back date selection */
+checkoutInput.addEventListener("change", () => {
+    if (checkoutInput.value <= checkinInput.value) {
+        alert("Checkout date must be after check-in date");
+        checkoutInput.value = "";
+    }
+});
+// Get trip data to determine currency
+const mapData = JSON.parse(localStorage.getItem("mapData") || "{}");
+const isInternational = mapData.is_international || false;
+const currency = isInternational ? "USD" : "INR";
+const currencySymbol = isInternational ? "$" : "₹";
+
+// Set room prices based on currency
+const roomPrices = isInternational ? {
+    normal: 25,  // ~2000 INR / 83 ≈ 24 USD
+    premium: 42, // ~3500 INR / 83 ≈ 42 USD
+    luxury: 72   // ~6000 INR / 83 ≈ 72 USD
+} : {
+    normal: 2000,
+    premium: 3500,
+    luxury: 6000
+};
+
+function calculatePrice() {
+    const checkin = new Date(document.getElementById("checkin").value);
+    const checkout = new Date(document.getElementById("checkout").value);
+    const roomType = document.getElementById("roomType").value;
+
+    if (!checkin || !checkout || checkout <= checkin) {
+        document.getElementById("price").innerText = `Total Price: ${currencySymbol}0`;
+        return 0;
+    }
+
+    const nights = Math.ceil(
+        (checkout - checkin) / (1000 * 60 * 60 * 24)
+    );
+
+    const total = nights * roomPrices[roomType];
+    document.getElementById("price").innerText =
+        `Total Price: ${currencySymbol}${total}`;
+
+    return total;
+}
+
+// Auto update price
+["checkin", "checkout", "roomType"].forEach(id => {
+    document.getElementById(id).addEventListener("change", calculatePrice);
+});
+
+// Submit booking
+document.getElementById("bookingForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const totalPrice = calculatePrice();
+    if (totalPrice === 0) {
+        alert("Please select valid dates");
+        return;
+    }
+
+    const receipt = {
+        booking_id: Math.floor(Math.random() * 100000),
+        hotel: document.getElementById("hotelName").value,
+        room: document.getElementById("roomType").value,
+        guests: document.getElementById("guests").value,
+        checkin: document.getElementById("checkin").value,
+        checkout: document.getElementById("checkout").value,
+        total_price: totalPrice,
+        currency: currency,
+        currency_symbol: currencySymbol,
+        status: "Confirmed"
+    };
+
+    localStorage.setItem("receipt", JSON.stringify(receipt));
+    window.location.href = "receipt.html";
+});
+
+    </script>
+    
+    <footer class="footer" style="margin-top: 4rem;">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About TravelMate</h4>
+                <p>Your ultimate travel companion for planning amazing trips.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html">Plan Trip</a></li>
+                    <li><a href="#">Support</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Follow Us</h4>
+                <div class="social-links">
+                    <a href="#" class="social-link">FB</a>
+                    <a href="#" class="social-link">TW</a>
+                    <a href="#" class="social-link">IG</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 TravelMate. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function logout() {
+            localStorage.clear();
+            window.location.href = "login.html";
+        }
+    </script>
+</body>
+</html>
