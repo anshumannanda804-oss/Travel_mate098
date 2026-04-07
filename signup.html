@@ -209,27 +209,27 @@ function register() {
         return;
     }
 
-    fetch("http://127.0.0.1:5000/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    })
-    .then(res => res.json())
-    .then(res => {
-        if (!res.success) {
-            alert(res.message);
-            return;
-        }
-        // Populate and show profile card
-        document.getElementById("summaryName").textContent = data.name;
-        document.getElementById("summaryEmail").textContent = data.email;
-        document.getElementById("summaryPhone").textContent = data.phone;
-        document.getElementById("summaryQuestion").textContent = data.security_question;
-        document.getElementById("profileCard").style.display = "block";
-        // Scroll to card
-        document.getElementById("profileCard").scrollIntoView({ behavior: "smooth" });
-    })
-    .catch(() => alert("Server error"));
+    fetch("https://travel-mate098-2.onrender.com/api/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+})
+.then(res => res.json())
+.then(res => {
+    if (!res.success) {
+        alert(res.message);
+        return;
+    }
+
+    document.getElementById("summaryName").textContent = data.name;
+    document.getElementById("summaryEmail").textContent = data.email;
+    document.getElementById("summaryPhone").textContent = data.phone;
+    document.getElementById("summaryQuestion").textContent = data.security_question;
+    document.getElementById("profileCard").style.display = "block";
+
+    document.getElementById("profileCard").scrollIntoView({ behavior: "smooth" });
+})
+.catch(() => alert("Server error"));
 }
 </script>
 
