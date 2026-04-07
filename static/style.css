@@ -1,0 +1,1155 @@
+/* LOADING SCREEN */
+
+#loader{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+    color:white;
+    font-family:'Poppins',sans-serif;
+}
+
+#loader h2{
+    margin-top:20px;
+    font-size:28px;
+}
+
+.plane{
+    font-size:60px;
+    animation: fly 1.5s infinite ease-in-out;
+}
+
+@keyframes fly{
+    0%{transform:translateY(0)}
+    50%{transform:translateY(-20px)}
+    100%{transform:translateY(0)}
+}
+
+
+
+
+
+
+
+
+
+
+
+/* ==================== GLOBAL STYLES ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #667eea;
+    --primary-dark: #5568d3;
+    --secondary-color: #764ba2;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #e74c3c;
+    --dark: #2c3e50;
+    --gray: #95a5a6;
+    --light-gray: #ecf0f1;
+    --white: #ffffff;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #2c3e50;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* ==================== NAVIGATION BAR ==================== */
+.navbar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+}
+
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-brand {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.5px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-link:hover {
+    color: white;
+    transform: translateY(-2px);
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: white;
+}
+
+.signup-btn {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2.6rem 1.5rem;
+    border-radius: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.signup-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* ==================== HERO SECTION ==================== */
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    color: white;
+    padding: 4rem 2rem;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.hero-content {
+    text-align: center;
+    max-width: 900px;
+    z-index: 2;
+    animation: fadeInUp 0.8s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    line-height: 1.2;
+}
+
+.hero-subtitle {
+    font-size: 1.3rem;
+    margin-bottom: 2.5rem;
+    opacity: 0.95;
+    font-weight: 300;
+}
+
+/* ==================== PLAN TRIP CARD ==================== */
+.plan-trip-card {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: var(--shadow-hover);
+    max-width: 600px;
+    margin: 2rem auto;
+    animation: slideUp 0.6s ease 0.2s both;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.plan-trip-card h3 {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.9rem 1.2rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* ==================== BUTTONS ==================== */
+.btn {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+    width: 100%;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: white;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+}
+
+.btn-secondary:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* ==================== DESTINATIONS SECTION ==================== */
+.destinations-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+    font-size: 1.1rem;
+    color: var(--gray);
+    font-weight: 300;
+}
+
+.places-wrapper {
+    display: flex;
+    gap: 2rem;
+    flex-direction: row-reverse;
+}
+
+.places-section {
+    flex: 1;
+}
+
+.category-section {
+    margin-bottom: 3rem;
+}
+
+.category-section h3 {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 3px solid var(--primary-color);
+    display: inline-block;
+}
+
+/* ==================== PLACES GRID ==================== */
+.places-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.place-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    transform: translateZ(0);
+    position: relative;
+}
+
+.place-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-hover);
+}
+
+.place-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.place-card:hover img {
+    transform: scale(1.1);
+}
+
+.place-info {
+    padding: 1.2rem;
+}
+
+.place-info h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--dark);
+    font-weight: 600;
+}
+
+.place-info p {
+    margin: 0.5rem 0 0;
+    color: var(--gray);
+    font-size: 0.9rem;
+}
+
+.place-card.active {
+    border: 3px solid var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2), var(--shadow-hover);
+}
+
+/* ==================== PLACE DETAILS PANEL ==================== */
+.place-details-panel {
+    flex: 0 0 300px;
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+}
+
+.place-details-panel h3 {
+    margin-top: 0;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+#detail-image-container {
+    width: 100%;
+    height: 200px;
+    margin: 1rem 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--light-gray);
+}
+
+#detail-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.detail-text {
+    color: #555;
+    line-height: 1.7;
+    font-size: 0.95rem;
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.detail-text p {
+    margin: 1rem 0;
+}
+
+/* ==================== FORM STYLING ==================== */
+input, select, button {
+    font-family: 'Poppins', sans-serif;
+}
+
+input, select {
+    padding: 0.9rem 1.2rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    background: white;
+    width: 100%;
+    margin: 0.5rem 0;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* ==================== ACCOMMODATION SELECTOR ==================== */
+.accommodation-selector {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
+    padding: 2rem;
+    border-radius: 15px;
+    margin: 2rem 0;
+    border: 2px solid rgba(102, 126, 234, 0.2);
+}
+
+.accommodation-selector h3 {
+    margin-top: 0;
+    color: var(--dark);
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+}
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.accom-btn {
+    padding: 1rem 1.5rem;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    background: white;
+    color: var(--dark);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+    min-width: 120px;
+}
+
+.accom-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.accom-btn[data-type="budget"] {
+    border-color: var(--success-color);
+    color: var(--success-color);
+}
+
+.accom-btn[data-type="medium"] {
+    border-color: var(--warning-color);
+    color: var(--warning-color);
+}
+
+.accom-btn[data-type="luxury"] {
+    border-color: var(--danger-color);
+    color: var(--danger-color);
+}
+
+.accom-btn.active {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.accom-btn[data-type="budget"].active {
+    background: var(--success-color);
+    color: white;
+    border-color: var(--success-color);
+}
+
+.accom-btn[data-type="medium"].active {
+    background: var(--warning-color);
+    color: white;
+    border-color: var(--warning-color);
+}
+
+.accom-btn[data-type="luxury"].active {
+    background: var(--danger-color);
+    color: white;
+    border-color: var(--danger-color);
+}
+
+/* ==================== TRIP DATA ==================== */
+#tripData {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
+    border-left: 5px solid var(--primary-color);
+    padding: 2rem;
+    border-radius: 12px;
+    margin: 2rem 0;
+    line-height: 1.8;
+    font-size: 0.95rem;
+    color: var(--dark);
+}
+
+#tripData b {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+#tripData hr {
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    margin: 1.5rem 0;
+}
+
+/* ==================== COST CATEGORY CARDS ==================== */
+.cost-category {
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    transition: all 0.3s ease;
+}
+
+.cost-category:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow);
+}
+
+.cost-category.budget {
+    border-left: 5px solid var(--success-color);
+}
+
+.cost-category.medium {
+    border-left: 5px solid var(--warning-color);
+}
+
+.cost-category.luxury {
+    border-left: 5px solid var(--danger-color);
+}
+
+/* ==================== HOTEL CARDS ==================== */
+.hotel-card {
+    background: white;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+}
+
+.hotel-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px);
+}
+
+.book-hotel-btn {
+    margin-top: 1rem;
+    padding: 0.8rem 1.2rem;
+    border: none;
+    background: linear-gradient(135deg, var(--warning-color) 0%, #ff9800 100%);
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.book-hotel-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 165, 0, 0.3);
+}
+
+/* ==================== BOOKING BUTTONS ==================== */
+.book-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.9rem 1.2rem;
+    border-radius: 10px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.book-btn img {
+    width: 24px;
+    height: 24px;
+}
+
+.irctc {
+    background: linear-gradient(135deg, #003366 0%, #2d5f96 100%);
+}
+
+.redbus {
+    background: linear-gradient(135deg, #1a1a1a 0%, #404040 100%);
+}
+
+.ixigo {
+    background: linear-gradient(135deg, #ff6f00 0%, #ff9500 100%);
+}
+
+.book-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+.book-btn:active {
+    transform: translateY(-1px);
+}
+
+/* ==================== LOGIN & SIGNUP STYLING ==================== */
+body.login-page {
+    background:
+        linear-gradient(135deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8)),
+        url("/static/images/mountain.jpg.png");
+        body.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+body.login-page .container {
+    width: 100%;
+    max-width: 450px;
+    padding: 3rem;
+    border-radius: 20px;
+    background: white;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}    
+}
+
+
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+body.login-page .container h2 {
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+body.login-page input {
+    background: #f8f9fa;
+    border: 2px solid #e0e0e0;
+    color: var(--dark);
+    width: 100%;
+    padding: 0.9rem 1.2rem;
+    margin: 0.8rem 0;
+    border-radius: 10px;
+    font-size: 0.95rem;
+}
+
+body.login-page input::placeholder {
+    color: #bbb;
+}
+
+body.login-page input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+body.login-page button {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    margin-top: 1rem;
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+body.login-page button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+body.login-page p {
+    color: #666;
+    margin: 1.5rem 0;
+    text-align: center;
+}
+
+body.login-page a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+body.login-page a:hover {
+    text-decoration: underline;
+}
+
+body.login-page select {
+    width: 100%;
+    padding: 0.9rem 1.2rem;
+    margin: 0.8rem 0;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    background: #f8f9fa;
+    color: var(--dark);
+}
+
+body.login-page select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: white;
+}
+
+body.login-page small {
+    display: block;
+    color: #888;
+    font-size: 0.85rem;
+    margin: 0.5rem 0 1rem;
+    text-align: center;
+}
+
+/* ==================== RECEIPT STYLING ==================== */
+.receipt-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+    padding: 2rem;
+    border-radius: 12px;
+    border-left: 5px solid var(--primary-color);
+    text-align: left;
+    margin: 2rem 0;
+    box-shadow: var(--shadow);
+}
+
+/* ==================== LOGOUT BUTTON ==================== */
+.logout-container {
+    position: fixed;
+    top: 100px;
+    right: 2rem;
+    z-index: 999;
+}
+
+.logout-btn {
+    background: linear-gradient(135deg, var(--danger-color) 0%, #c82333 100%);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+.logout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
+}
+
+/* ==================== FOOTER ==================== */
+.footer {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: white;
+    padding: 3rem 2rem 0;
+    margin-top: 4rem;
+}
+
+.footer-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    padding-bottom: 2rem;
+}
+
+.footer-section h4 {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
+
+.footer-section p {
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.footer-section ul {
+    list-style: none;
+}
+
+.footer-section ul li {
+    margin: 0.5rem 0;
+}
+
+.footer-section ul a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.footer-section ul a:hover {
+    color: white;
+    margin-left: 5px;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-link {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background: rgba(102, 126, 234, 0.2);
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 0.8rem;
+    padding: 0;
+}
+
+.social-link:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-3px);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding: 2rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+.footer-bottom a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.footer-bottom a:hover {
+    text-decoration: underline;
+}
+
+/* ==================== RESULTS PAGE ==================== */
+body.results-page {
+    background: #f8f9fa;
+}
+
+body.results-page .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+body.results-page h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    color: var(--dark);
+    margin-bottom: 1.5rem;
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0.8rem 0;
+    }
+
+    .nav-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .nav-links {
+        gap: 1rem;
+    }
+
+    .hero-title {
+        font-size: 2.2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .plan-trip-card {
+        padding: 1.5rem;
+    }
+
+    .places-wrapper {
+        flex-direction: column;
+    }
+
+    .place-details-panel {
+        flex: 1;
+        position: static;
+    }
+
+    .places-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+    }
+
+    .logout-container {
+        top: 70px;
+        right: 1rem;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .accom-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 1.8rem;
+    }
+
+    .plan-trip-card {
+        padding: 1rem;
+    }
+
+    .places-grid {
+        grid-template-columns: 1fr;
+    }
+
+    body.login-page .container {
+        padding: 1.5rem;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .book-btn {
+        flex-direction: column;
+        padding: 0.7rem;
+    }
+}
+
+/* ==================== SCROLLBAR STYLING ==================== */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
+}
+
+/* ==================== ANIMATIONS ==================== */
+/* ===== PRO LOADER ===== */
+
+/* ===== PREMIUM LOADER ===== */
+
+
+
+/* ===== GLOBE LOADER ===== */
+
+#loader{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:linear-gradient(135deg,#1e3c72,#2a5298);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    z-index:9999;
+    overflow:hidden;
+}
+
+/* 🌍 Globe */
+.globe{
+    width:140px;
+    height:140px;
+    border-radius:50%;
+    background: url('https://upload.wikimedia.org/wikipedia/commons/6/6f/Earth_Eastern_Hemisphere.jpg');
+    background-size:cover;
+    animation: rotateGlobe 8s linear infinite;
+    box-shadow:0 0 40px rgba(0,255,255,0.6);
+}
+
+/* Globe rotation */
+@keyframes rotateGlobe{
+    0%{transform:rotate(0deg)}
+    100%{transform:rotate(360deg)}
+}
+
+/* ✈️ Plane */
+.plane{
+    position:absolute;
+    font-size:40px;
+    animation: fly 2.5s ease-in-out infinite;
+}
+
+@keyframes fly{
+    0%{transform:translateX(-120px) rotate(-10deg)}
+    50%{transform:translateX(120px) rotate(10deg)}
+    100%{transform:translateX(-120px) rotate(-10deg)}
+}
+
+/* Brand */
+.brand{
+    margin-top:30px;
+    font-size:28px;
+    color:white;
+    letter-spacing:3px;
+    animation: fade 2s infinite;
+}
+
+@keyframes fade{
+    0%,100%{opacity:1}
+    50%{opacity:0.4}
+}
+
+@keyframes spin{
+    0%{transform:rotate(0deg)}
+    100%{transform:rotate(360deg)}
+}
+
+/* plane animation */
+.plane{
+    font-size:50px;
+    position:absolute;
+    animation:fly 2.5s ease-in-out infinite;
+}
+
+@keyframes fly{
+    0%{transform:translateX(-120px) rotate(-10deg)}
+    50%{transform:translateX(120px) rotate(10deg)}
+    100%{transform:translateX(-120px) rotate(-10deg)}
+}
+
+/* brand text */
+.brand{
+    position:absolute;
+    bottom:20%;
+    font-size:28px;
+    color:white;
+    letter-spacing:3px;
+    animation:fade 2s infinite;
+}
+
+@keyframes fade{
+    0%,100%{opacity:1}
+    50%{opacity:0.4}
+}
