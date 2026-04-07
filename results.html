@@ -383,9 +383,12 @@ document.getElementById("tripData").innerHTML = `
 `;
 
 /* FETCH BACKEND */
-fetch("http://127.0.0.1:5000/api/trip-details", {
+/* FETCH BACKEND */
+fetch("https://travel-mate098-2.onrender.com/api/trip-details", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { 
+        "Content-Type": "application/json" 
+    },
     body: JSON.stringify({
         source: trip.source,
         destination: trip.destination,
@@ -407,31 +410,18 @@ fetch("http://127.0.0.1:5000/api/trip-details", {
 
     let options = [];
 
-    // Bus
     if (transport.bus) {
-        options.push({
-            type: "Bus",
-            total: transport.bus + extra
-        });
+        options.push({ type: "Bus", total: transport.bus + extra });
     }
 
-    // Train
     if (transport.train) {
-        options.push({
-            type: "Train",
-            total: transport.train + extra
-        });
+        options.push({ type: "Train", total: transport.train + extra });
     }
 
-    // Flight
     if (transport.flight) {
-        options.push({
-            type: "Flight",
-            total: transport.flight + extra
-        });
+        options.push({ type: "Flight", total: transport.flight + extra });
     }
 
-    // Find cheapest option
     let bestOption = options.reduce((min, current) =>
         current.total < min.total ? current : min
     );
@@ -451,9 +441,7 @@ fetch("http://127.0.0.1:5000/api/trip-details", {
     Flight: ${tripData.accommodation_costs.currency} ${transport.flight ?? "N/A"}
     `;
 
-    // Display default accommodation (budget)
     selectAccommodation('budget');
-    
     updateMap(tripData);
 })
 .catch(err => {
