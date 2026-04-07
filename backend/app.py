@@ -56,9 +56,7 @@ def estimate_transport_cost(distance_km, is_international, destination=None, sam
         transport["flight"] = int(distance_km * flight_rate)
 
     return transport
-@app.route("/")
-def home():
-    return "TravelMate Backend is Running 🚀"
+
 
 # ---------------- REGISTER ----------------
 @app.route("/api/register", methods=["POST"])
