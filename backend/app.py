@@ -4,13 +4,25 @@ from flask_cors import CORS
 import sqlite3
 import requests
 import re
+import os
 from database import init_db
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../', static_url_path='/')
 CORS(app)
 
 # Initialize database
 init_db()
+
+@app.route("/")
+def home():
+    return app.send_static_file("index.html")
+
+@app.route("/<path:path>")
+def serve_static(path):
+    if path != "" and os.path.exists(app.static_folder + '/' + path):
+        return app.send_static_file(path)
+    else:
+        return app.send_static_file("index.html")
 
 # ---------------- UTILS ----------------
 def get_connection():
