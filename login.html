@@ -187,14 +187,29 @@
         }
 
         function goPlanner() {
-            // Simple frontend login simulation
-            if (email.value && password.value) {
-                localStorage.setItem("user", email.value);
-                // Show profile card instead of redirecting
-                document.getElementById("userEmail").textContent = email.value;
-                document.getElementById("profileCard").style.display = "block";
-                // Scroll to card
-                document.getElementById("profileCard").scrollIntoView({ behavior: "smooth" });
+            const emailVal = document.getElementById("email").value.trim();
+            const passwordVal = document.getElementById("password").value;
+
+            if (emailVal && passwordVal) {
+                fetch("/api/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: emailVal, password: passwordVal })
+                })
+                .then(res => res.json())
+                .then(res => {
+                    if (!res.success) {
+                        alert(res.message);
+                        return;
+                    }
+                    localStorage.setItem("user", emailVal);
+                    // Show profile card
+                    document.getElementById("userEmail").textContent = emailVal;
+                    document.getElementById("profileCard").style.display = "block";
+                    // Scroll to card
+                    document.getElementById("profileCard").scrollIntoView({ behavior: "smooth" });
+                })
+                .catch(() => alert("Server error"));
             } else {
                 alert("Please enter email and password");
             }
