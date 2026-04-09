@@ -15,14 +15,14 @@ init_db()
 
 @app.route("/")
 def home():
-    return app.send_static_file("index.html")
+    return app.send_static_file("login.html")
 
 @app.route("/<path:path>")
 def serve_static(path):
     if path != "" and os.path.exists(app.static_folder + '/' + path):
         return app.send_static_file(path)
     else:
-        return app.send_static_file("index.html")
+        return app.send_static_file("login.html")
 
 # ---------------- UTILS ----------------
 def get_connection():
