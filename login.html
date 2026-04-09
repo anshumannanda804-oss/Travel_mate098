@@ -205,11 +205,8 @@
                         return;
                     }
                     localStorage.setItem("user", emailVal);
-                    // Show profile card
-                    document.getElementById("userEmail").textContent = emailVal;
-                    document.getElementById("profileCard").style.display = "block";
-                    // Scroll to card
-                    document.getElementById("profileCard").scrollIntoView({ behavior: "smooth" });
+                    // Navigate away so the browser officially logs a successful form submission and prompts to save password
+                    window.location.href = "index.html";
                 })
                 .catch(() => alert("Server error"));
             } else {
