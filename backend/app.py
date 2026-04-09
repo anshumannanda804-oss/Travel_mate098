@@ -114,6 +114,29 @@ def register():
     return jsonify({"success": True})
 
 
+# ---------------- LOGIN ----------------
+@app.route("/api/login", methods=["POST"])
+def login():
+    data = request.get_json()
+    email = data.get("email")
+    password = data.get("password")
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT password FROM users WHERE email = ?", (email,))
+    row = cursor.fetchone()
+    conn.close()
+
+    if not row:
+        return jsonify({"success": False, "message": "Email not found"}), 404
+
+    if row[0] != password:
+        return jsonify({"success": False, "message": "Invalid password"}), 403
+
+    return jsonify({"success": True})
+
+
 # ---------------- GET SECURITY QUESTION ----------------
 @app.route("/api/get-security-question", methods=["POST"])
 def get_security_question():
