@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" href="/static/favicon.ico">
     <meta charset="UTF-8">
     <title>Plan Trip</title>
     <link rel="stylesheet" href="static/style.css">
@@ -50,26 +49,26 @@ function planTrip() {
     }));
 
     // ✅ SEND SOURCE, DESTINATION & DAYS
-    fetch("https://travel-mate098-2.onrender.com/api/trip-details", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-        source: source,
-        destination: destination,
-        days: days
+    fetch("/api/trip-details", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            source: source,
+            destination: destination,
+            days: days
+        })
     })
-})
-.then(res => res.json())
-.then(res => {
-    if (!res.success) {
-        alert(res.message);
-        return;
-    }
+    .then(res => res.json())
+    .then(res => {
+        if (!res.success) {
+            alert(res.message);
+            return;
+        }
 
-    localStorage.setItem("mapData", JSON.stringify(res.data));
-    window.location.href = "results.html";
-})
-.catch(() => alert("Backend not reachable"));
+        localStorage.setItem("mapData", JSON.stringify(res.data));
+        window.location.href = "results.html";
+    })
+    .catch(() => alert("Backend not reachable"));
 }
 </script>
 
